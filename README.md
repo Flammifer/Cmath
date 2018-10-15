@@ -1,2 +1,2 @@
 # Cmath
-computetional math(MIPT course)
+Hello, **Gordey Goyman**
