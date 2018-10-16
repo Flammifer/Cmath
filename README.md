@@ -2,7 +2,7 @@
 ## Calculate Euler–Mascheroni constant, which is given by formula:
 # ![alt text](https://latex.codecogs.com/gif.latex?C%20%3D%20%5Clim%20%5Climits_%7Bn%20%5Cto%20%5Cinfty%7D%20%28%5Csum%20%5Climits_%7Bk%3D0%7D%5E%7Bn%7D%20%5Cfrac%7B1%7D%7Bk%7D%20-%20%5Cln%20n%29 "Logo Title Text 1")
 
-I will sum over sums given by every *10 000 000* harmonic terms. First tests showed that series converge to **C** very slowly, in this  case I have to sum vast amoun of terms. So I decided to calculate every 10 000 000 once. If you decide to make step of algorithm smaller (e.g. ~ 1000) it takes a terrible amount of time and memory.  
+I will sum over sums given by every *10 000 000* harmonic terms. First tests showed that series converge to **C** very slowly, in this  case I have to sum vast amount of terms. So I decided to calculate every 10 000 000 once. If you decide to make step of algorithm smaller (e.g. ~ 1000) it takes a terrible amount of time and memory.  
 
 9.3 program output:
 ~~~~Current approximation: 8.661487806918693e-09
