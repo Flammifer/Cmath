@@ -1,4 +1,7 @@
-# Cmath
+# 9.3 
+## Calculate Euler–Mascheroni constant, which is given by formulae:
+![alt text](https://latex.codecogs.com/gif.latex?C%20%3D%20%5Clim%20%5Climits_%7Bn%20%5Cto%20%5Cinfty%7D%20%28%5Csum%20%5Climits_%7Bk%3D0%7D%5E%7Bn%7D%20%5Cfrac%7B1%7D%7Bk%7D%20-%20%5Cln%20n%29 "Logo Title Text 1")
+
 Hello, **Gordey Goyman**
 
 9.3 program output:
