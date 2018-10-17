@@ -93,3 +93,5 @@ Current approximation: 1.0089272228769077e-10
 Current approximation: 9.971097849969767e-11
 ~~~~
 Euler–Mascheroni constant is approximately: **C = 0.5772156649586**
+
+While program was running, I managed to go to the shop
