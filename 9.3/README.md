@@ -94,4 +94,4 @@ Current approximation: 9.971097849969767e-11
 ~~~~
 Euler–Mascheroni constant is approximately: **C = 0.5772156649586**
 
-While program was running, I managed to go to the shop and came back
+Значение для прямого суммирования: **C = 0.5772156649507956**
