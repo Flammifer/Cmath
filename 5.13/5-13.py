@@ -28,53 +28,62 @@ def f4(x):
         return (1/6*x - 6.5)
     else: return 0
 
+def scalar_product(x, y):
+    tmp = 0.0
+    for i in range(len(x)):
+        tmp += x[i]*y[i]
+    return tmp
+#------------------------------------------------------------------------------------------------------------------
 def linear_combination(t, w):
     result = []
     for x in t:
         result.append( w[0]*f1(x)+w[1]*f2(x)+w[2]*f3(x)+w[3]*f4(x))
     return result
-def F(x, y, w): #functional
+def F(x, y, w):
     t = 0
     for i in range(len(x)):
         t += (w[0]*f1(x[i])+w[1]*f2(x[i])+w[2]*f3(x[i])+w[3]*f4(x[i]) - y[i])**2
     return t
+
 flag = 1
 step = 1
-n = 0
 lambda_ = 0.01
-epsilon = 0.01
-w = [0, 0, 0, 0]
+epsilon = 0.0001
+n = 0
+w = [200, 200, 200, 200]
+fastest_grad = []  #градиент, вдоль которого будем идти
 while flag:
     n += 1
-    grad = []
-    lambda_ = lambda_*0.95
+    #lambda_ = lambda_*0.95
+    grad = [] #локальный градиент
     for i in range(len(w)):
-        flag2 = 1
-        k = 1 #bool
-        while flag2:
-            u = []
-            o = []
-            for j in range(len(w)):
-                if i == j:
-                    u.append(w[j]-step)
-                    o.append(w[j]+step)
-                else:
-                    u.append(w[j])
-                    o.append(w[j])
-            derivative = ((F(x, y, o)- F(x, y, u))/(2*step))
-            if (k):
-                grad.append(derivative)
-            k = 0
-            w[i] -= lambda_*derivative
-            if (abs(derivative) < epsilon):
-                flag2 = 0
-        tmp = 0
-        for k in grad:
-                tmp += abs(k)
-        if (tmp< 2*len(w)*epsilon):
-            flag = 0
+        u = []
+        o = []
+        for j in range(len(w)):
+            if i == j:
+                u.append(w[j]-step)
+                o.append(w[j]+step)
+            else:
+                u.append(w[j])
+                o.append(w[j])
+        grad.append((F(x, y, o)- F(x, y, u))/(2*step))
+    if (len(fastest_grad) == 0):
+        fastest_grad = grad
+    print(grad, n)
+
+    if (abs(scalar_product(fastest_grad, grad)/scalar_product(fastest_grad, fastest_grad)) > 0.1):
+        for j in range(len(w)):
+            w[j] -= lambda_*fastest_grad[j]
+    else:
+        fastest_grad = grad
+        print("Gradient was changed", n, fastest_grad)
+
+
+
+    if (scalar_product(grad, grad)< epsilon*10):
+        flag = 0
 print(w, grad)
-print(n)
+
 t = np.linspace(20, 45, 100)
 fig = plt.figure()
 ax1 = fig.subplots()
