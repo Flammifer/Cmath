@@ -44,18 +44,8 @@ def F(x, y, w):
     for i in range(len(x)):
         t += (w[0]*f1(x[i])+w[1]*f2(x[i])+w[2]*f3(x[i])+w[3]*f4(x[i]) - y[i])**2
     return t
-
-flag = 1
-step = 1
-lambda_ = 0.01
-epsilon = 0.0001
-n = 0
-w = [200, 200, 200, 200]
-fastest_grad = []  #градиент, вдоль которого будем идти
-while flag:
-    n += 1
-    #lambda_ = lambda_*0.95
-    grad = [] #локальный градиент
+def gradient(w):
+    grad = []
     for i in range(len(w)):
         u = []
         o = []
@@ -67,22 +57,67 @@ while flag:
                 u.append(w[j])
                 o.append(w[j])
         grad.append((F(x, y, o)- F(x, y, u))/(2*step))
-    if (len(fastest_grad) == 0):
-        fastest_grad = grad
-    print(grad, n)
+    return grad #Градиент F в точке с весами W[]
+def vec_multip(x, vec): #умножение веткора на число
+    res = []
+    for i in vec:
+        res.append(x*i)
+    return res
 
-    if (abs(scalar_product(fastest_grad, grad)/scalar_product(fastest_grad, fastest_grad)) > 0.1):
-        for j in range(len(w)):
-            w[j] -= lambda_*fastest_grad[j]
-    else:
-        fastest_grad = grad
-        print("Gradient was changed", n, fastest_grad)
+#Мне лень делать перегрузку операторов. Мб уже есть библиотека? Ну да ладно
+def vec_sum(x, y):
+    s = []
+    if (len(x) != len(y)):
+        return s #S stands for safety....
+    for i in range(len(x)):
+        s.append(x[i]+y[i])
+    return s #сумма векторов
 
 
 
-    if (scalar_product(grad, grad)< epsilon*10):
+flag = 1
+step = 1
+lambda_ = 0.01
+epsilon = 0.0001
+n = 0
+w = [200, 200, 200, 200]
+fastest_grad = []  #градиент, вдоль которого будем идти
+while flag:
+    n += 1
+    fastest_grad =  gradient(w)
+    print(fastest_grad, n)
+    #Поиск lambda_
+    flag2 = 1
+    a = 0
+    b = 1
+    while flag2:
+        c = (a+b)/2
+        if a != 0:
+            Fa = scalar_product(gradient(vec_sum(vec_multip(-a, fastest_grad), w)),fastest_grad)/(scalar_product(fastest_grad, fastest_grad))
+        else:
+            Fa = 1
+        Fb = scalar_product(gradient(vec_sum(vec_multip(-b, fastest_grad), w)), fastest_grad)/(scalar_product(fastest_grad, fastest_grad))
+        Fc = scalar_product(gradient(vec_sum(vec_multip(-c, fastest_grad), w)), fastest_grad)/(scalar_product(fastest_grad, fastest_grad))
+        #print(Fa, Fc,  Fb)
+        if (abs(Fa) < epsilon ):
+            lambda_ = a
+            flag2 = 0
+        if (abs(Fb) < epsilon ):
+            lambda_ = b
+            flag2 = 0
+        if (Fa*Fb >0):
+            b = c #знаем, что минимум не сильно далеко от 0
+        else:
+            if (Fc*Fb > 0):
+                b = c
+            else:
+                a = c
+        print(Fa, Fc, Fb)
+    for j in range(len(w)):
+        w[j] -= lambda_*fastest_grad[j]
+    if (scalar_product(fastest_grad, fastest_grad)< epsilon*10):
         flag = 0
-print(w, grad)
+print(w, fastest_grad)
 
 t = np.linspace(20, 45, 100)
 fig = plt.figure()
