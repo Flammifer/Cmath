@@ -1,4 +1,4 @@
-from math import exp
+from math import exp, cos, sin
 def xex(x):
     return x**2-exp(x)/5
 
@@ -23,3 +23,11 @@ def bin_search(F, a, b, eps = 10**(-8)):
             return c
 
 print(bin_search(xex, 3, 5))
+
+def cossin(x):
+    return cos(sin(x)-1.32) - x + 0.85
+def sincos(y):
+    return sin(cos(y)+0.85) - y - 1.32
+
+print(bin_search(cossin, -10, +10))
+print(bin_search(sincos, -10, +10))
