@@ -10,12 +10,17 @@ def dihotom(F, a, b, eps = 10**(-8)):
     k = 0
     while 1:
         yk = (a0+c)/2
-        if (F(yk) <= F(c)):
+        if (F(yk) <= F(c)): # step 1 a)
             b0 = c
             c = yk
-        else:
-            b0 = c
-            c =yk
+        else: # setp 2 b)
+            zk = (c+b0)/2
+            if (F(c)<= F(zk)):
+                a0 = yk
+                b0 = zk
+            else:
+                a0 = c
+                c = zk
         k += 1
         if (b0-a0) < 10**(-5):
             print("Steps: ", k)
@@ -32,3 +37,4 @@ print(dihotom(func, -33, -1))
 
 print(check_extr(func, 0.0))
 print(check_extr(func, -5.0))
+
