@@ -13,7 +13,7 @@ def trapeze(h, ini_vec,  t_ini = 0.0, t_fin = 10.0):
     A = np.array([[1,0], [0,1]]) - np.dot(J, h/2)
 
     for i in range(1, int((t_fin-t_ini)/h)+1):
-        t = i*h
+        t = t_ini + i*h
         B = y_n + np.dot(np.dot(J, y_n), h/2)
         #print('t = ', t, ' A, B', A, B)
         y_np = np.linalg.solve(A, B)
@@ -24,11 +24,11 @@ def trapeze(h, ini_vec,  t_ini = 0.0, t_fin = 10.0):
 def check(vec, t):
     return (abs(vec[0]-solution(t)[0]) + abs(vec[1]-solution(t)[1]))/(abs(solution(t)[0]) + abs(solution(t)[1]))
 def cros(h, ini_vec, t_ini = 0.0, t_fin = 10.0):
-        t = t_ini
+        t =  t_ini
         sol = np.array([ini_vec[0], ini_vec[1]])
         E = np.array([[1,0], [0,1]])
         for i in range(1, int((t_fin-t_ini)/h)+1):
-            t = i*h
+            t = t_ini + i*h
             tmp =np.linalg.solve(np.add(E, -h*complex(1/2, 1/2 )*J) , np.dot(J,sol) )
             sol = np.add(sol, h*(tmp.real))
         return sol
