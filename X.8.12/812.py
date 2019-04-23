@@ -4,21 +4,30 @@ J = np.array([(998,  1998) ,(-999,-1999)])
 h = [10**(-4), 10**(-3), 0.0025, 5*10**(-3), 0.01]
 def solution(t):
     return (-3*(exp(-1000*t)) + 4*(exp(-t)), 3*(exp(-1000*t)) -2*(exp(-t)) )
-def Adams(h, ini_vec,  t_ini = 0.0, t_fin = 10.0):
+
+
+def trapeze(h, ini_vec,  t_ini = 0.0, t_fin = 10.0):
     t = t_ini
-    sol_ = [ini_vec[0], ini_vec[1]] #я не буду ничего хранить, кроме предыдущего. т.к. k==1
-    sol = sol_[:]
-    while t < t_fin:
-        t  += h
-        sol[0] += np.multiply(np.sum([J[0][0]*sol_[0] , J[0][1]*sol_[1]]), h)
-        sol[1] += np.multiply(np.sum([J[1][0]*sol_[0] , J[1][1]*sol_[1]]), h)
-        sol_ = sol[:]
-    return sol
+    y_np = np.array([0,0]) #y_n+1 =  ...
+    y_n = np.array([ini_vec[0], ini_vec[1]])
+    A = np.array([[1,0], [0,1]]) - np.dot(J, h/2)
+
+    while t<t_fin:
+        t += h
+        B = y_n + np.dot(np.dot(J, y_n), h/2)
+        #print('t = ', t, ' A, B', A, B)
+        y_np = np.linalg.solve(A, B)
+        y_n = y_np[:]
+        #print(y_np)
+    return y_np
+
+
+
 def check(vec, t):
     return (abs(vec[0]-solution(t)[0]) + abs(vec[1]-solution(t)[1]))/(abs(solution(t)[0]) + abs(solution(t)[1]))
 
 
-def CROS(h, ini_vec, t_ini = 0.0, t_fin = 10.0):
+def cros(h, ini_vec, t_ini = 0.0, t_fin = 10.0):
         t = t_ini
         sol = np.array([ini_vec[0], ini_vec[1]])
         E = np.array([[1,0], [0,1]])
@@ -29,7 +38,7 @@ def CROS(h, ini_vec, t_ini = 0.0, t_fin = 10.0):
         return sol
 
 
-
+#print("trapeze", check(trapeze(h[0], (1,1)), 10))
 for i in range(5):
-    print("Adams", check(Adams(h[i], (1,1)), 10))
-    print("CROS", check(CROS(h[i], (1,1)),10))
+    print("trapeze, h = ", h[i], 'Accuracy = ',  check(trapeze(h[i], (1,1)), 10))
+    print("CROS, h = ", h[i], 'Accuracy = ', check(cros(h[i], (1,1)),10))
