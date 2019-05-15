@@ -17,10 +17,10 @@ def shuttle(A, C, f): #прогонка для матриц с одинаков�
     for i in range(N-2, -1, -1):
         x[i] = (Fn[i] - A*x[i+1])/(Cn[i])
     return x
-Nx = 25 #количество узлов сетки по координате
-Nt = 500 #по времени
-h = 1/Nx
-tau = 1/Nt
+Nx = 100 #количество узлов сетки по координате
+Nt = 1000 #по времени
+h = 1/(Nx-1)
+tau = 1/(Nt-1)
 
 def check(x, t, u):
     return ((1-exp(-t*pi**2))*sin(pi*x) - u)
@@ -36,22 +36,28 @@ for i in range(Nx-2):
 u = np.array([[0.0]*(Nx-2)]*(Nt))
 
 f = [0.0]*(Nx-2)
-for i in range(Nx-2):
-    f[i] = tau*pi**2 * sin(pi*(i+1)/(Nx-1))
+for j in range(Nx-2):
+    f[j] =tau* pi**2 * sin(pi*(j+1)/(Nx-1))
 
 
 for i in range(1, Nt): #идем по строкам сетки вверх
-    Q = np.dot((E+tau/2 * Lxx/h**2), u[i-1]) + f
-    #u[i] = shuttle(-tau/(2*h**2), 1 + tau/(h**2), Q)
+
+    Q = np.dot(E + 0.5 * tau*Lxx/h**2, u[i-1])  + f
     u[i] = np.linalg.solve(((E-tau/2 * Lxx/h**2)), Q)
 w = np.array([[0.0]*Nx]*Nt)
 var = np.array([[0.0]*Nx]*Nt)
+real = np.array([[0.0]*Nx]*Nt)
 for i in range(Nt):
     for j in range(Nx):
+
         if j==0 or j==Nx-1:
             w[i][j] = 0.0
             var[i][j] = 0.0
+            real[i][j] = 0.0
         else:
             w[i][j] = u[i][j-1]
-            var[i][j] = check(j*h, i*tau, u[i][j-1])
+            real[i][j] = check((j)*h, i*tau, 0)
+            var[i][j] = abs(check(j*h, i*tau, u[i][j-1]))
 print(np.max(var))
+#print(w)
+#print(var)
