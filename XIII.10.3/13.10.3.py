@@ -18,12 +18,12 @@ def shuttle(A, C, f): #прогонка для матриц с одинаков�
         x[i] = (Fn[i] - A*x[i+1])/(Cn[i])
     return x
 Nx = 25 #количество узлов сетки по координате
-Nt = 100 #по времени
+Nt = 500 #по времени
 h = 1/Nx
 tau = 1/Nt
 
 def check(x, t, u):
-    return ((1-exp(-t*pi**2))*sin(pi*x) - u)/(1-exp(-t*pi**2))*sin(pi*x)
+    return ((1-exp(-t*pi**2))*sin(pi*x) - u)
 
 E = np.identity(Nx-2)
 Lxx = np.array([[0.0]*(Nx-2)]*(Nx-2))
@@ -53,6 +53,5 @@ for i in range(Nt):
             var[i][j] = 0.0
         else:
             w[i][j] = u[i][j-1]
-            if (abs(u[i][j-1]) > 0):
-                var[i][j] = check(j*h, i*tau, u[i][j-1])
+            var[i][j] = check(j*h, i*tau, u[i][j-1])
 print(np.max(var))
